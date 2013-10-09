@@ -1,4 +1,4 @@
-prioritize
+Prioritize
 ==========
 
-Prioritize list online
+A free to use service to prioritize lists online.
