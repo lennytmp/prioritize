@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Prioritizer</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="css/style.css" rel="stylesheet" media="screen">
+</head>
+<body>
+<div id="inputs" class="row container">
+    <div class="span6">
+        <div class="row">
+            <div class="span6">
+                <h1>Prioritize it!</h1>
+                <ol class="lead">
+                    <li>Enter the unsorted list you want to prioritize.</li>
+                    <li>Answer several questions.</li>
+                    <li>Get the prioritized list!</li>
+                </ol>
+            </div>
+        </div>
+        <div class="row">
+            <textarea rows="10" id="text" class="span5" autofocus></textarea>
+            <div class="buttonContainer">
+                <button class="btn btn-primary" type="button" id="start">Start</button>
+            </div>
+        </div>
+    </div>
+    <div class="span5 videoCol">
+        <iframe width="375" height="211" src="http://www.youtube.com/embed/MShbP3OpASA?rel=0" frameborder="0" allowfullscreen></iframe>
+    </div>
+</div>
+
+<div id="compare" class="row container hidden">
+    <div class="row text-center">
+        <h1>Make the choice!</h1>
+        <p class="lead"> What is more important?</p>
+    </div>
+    <div class="row text-center">
+        <h2 id="thing0" class="choice">Thing1</h2>
+        <span class="lead">vs</span>
+        <h2 id="thing1" class="choice">Thing2</h2>
+    </div>
+</div>
+
+<div id="output" class="row container hidden">
+    <div class="row">
+                <h1>Here is the result</h1>
+                <ol id="result" class="lead"></ol>
+    </div>
+    <div class="row">
+        <!-- share buttons -->
+    </div>
+</div>
+<script src="http://code.jquery.com/jquery.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
