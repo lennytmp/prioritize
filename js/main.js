@@ -32,6 +32,8 @@ $(function() {
         var text = $("#text").val();
         items = validateData(text);
         if (!items) {return;}
+        choices = [];
+        currentChoice = 0;
         $("#textContainter").removeClass("error");
         $("#errorLabel").addClass("hidden");
         $("#inputs").addClass("hidden");
@@ -84,8 +86,18 @@ $(function() {
         setCompare();
     });
 
-    $("#backCompare").click(function(){
-        currentChoice--;
-        setCompare();
+    $(".back").click(function(){
+        if (currentChoice > 0) {
+            currentChoice--;
+            setCompare();
+            if ($("#compare").hasClass("hidden")) {
+                $("#compare").removeClass("hidden");
+                $("#result").html("");
+                $("#output").addClass("hidden");
+            }
+        } else {
+            $("#inputs").removeClass("hidden");
+            $("#compare").addClass("hidden");
+        }
     });
 });
