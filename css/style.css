@@ -30,3 +30,40 @@ ol.lead > li {
     color: blue;
     text-decoration: underline;
 }
+
+.nav-tabs-center > li, .nav-pills-center > li {
+    float:none;
+    display:inline-block;
+    *display:inline; /* ie7 fix */
+    zoom:1; /* hasLayout ie7 trigger */
+}
+
+.nav-tabs-center, .nav-pills-center {
+    text-align:center;
+}
+
+.progress.vertical {
+    margin:5px auto;
+    height: 100px;
+    width: 30px;
+}
+.bar.bar-info {
+    background:none;
+    width:100%
+}
+
+.bar.bar-success {
+    width:100%
+}
+
+.bar-empty {
+    height: 100%
+}
+
+.bar-full {
+    height: 0%;
+}
+
+#vs {
+    margin-top:50px;
+}
