@@ -2,6 +2,12 @@ var choices = [];
 var items = [];
 var currentChoice = 0;
 var setCompare = function() {
+    $("#currentChoice").text(currentChoice+1);
+    var percent = Math.round(currentChoice*100/items.length);
+    console.log(percent+'%', (100-percent)+"%");
+    $("#bar-full").text(percent + "%");
+    $("#bar-full").height(percent + "%");
+    $("#bar-empty").height((100-percent) + "%");
     $("#thing0").text(choices[currentChoice][0]);
     $("#thing1").text(choices[currentChoice][1]);
 };
@@ -13,7 +19,7 @@ var validateData = function(text) {
     var itemsToCheck = text.match(/[^\r\n]+/g);
     var items = [];
     $.each(itemsToCheck, function(index1, item) {
-        if (item != "") {
+        if (item != "" && items.indexOf(item) == -1) {
             items.push(item);
         }
     });
@@ -44,6 +50,7 @@ $(function() {
                 }
             });
         });
+        $("#totalChoices").text(choices.length);
         $("#compare").removeClass("hidden");
         setCompare();
     });

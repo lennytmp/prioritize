@@ -22,7 +22,7 @@
                 </div>
             </div>
             <div class="row">
-                <div id="textContainter" class="control-group"><label id="errorLabel" class="control-label hidden" for="text">You must enter at least two items</label>
+                <div id="textContainter" class="control-group"><label id="errorLabel" class="control-label hidden" for="text">You must enter at least two different items</label>
                     <textarea rows="10" id="text" class="span5" autofocus placeholder="Enter list, each element on new line"></textarea>
                     <div class="buttonContainer">
                         <button class="btn btn-primary" type="button" id="start">Start</button>
@@ -61,8 +61,8 @@
         <div class="span1 text-center">
             <span id="currentChoice">0</span> of <span id="totalChoices">0</span>
             <div class="progress vertical">
-                <div class="bar bar-info bar-empty"></div>
-                <div class="bar bar-success bar-full"></div>
+                <div id="bar-empty" class="bar bar-info"></div>
+                <div id="bar-full" class="bar bar-success"></div>
             </div>
         </div>
     </div>

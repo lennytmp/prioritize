@@ -56,11 +56,11 @@ ol.lead > li {
     width:100%
 }
 
-.bar-empty {
+#bar-empty {
     height: 100%
 }
 
-.bar-full {
+#bar-full {
     height: 0%;
 }
 
