@@ -5,11 +5,36 @@ var setCompare = function() {
     $("#thing0").text(choices[currentChoice][0]);
     $("#thing1").text(choices[currentChoice][1]);
 };
+var validateData = function(text) {
+    if (text=="") {
+        reportError();
+        return null;
+    }
+    var thingsToCheck = text.match(/[^\r\n]+/g);
+    var things = [];
+    $.each(thingsToCheck, function(index1, thing1) {
+        if (thing1 != "") {
+            things.push(thing1);
+        }
+    });
+    if (!things || things.length < 2) {
+        reportError();
+        return null;
+    }
+    return things;
+};
+var reportError = function() {
+    $("#textContainter").addClass("error");
+    $("#errorLabel").removeClass("hidden");
+};
 $(function() {
     $("#start").click(function() {
-        $("#inputs").addClass("hidden");
         var text = $("#text").val();
-        var things = text.match(/[^\r\n]+/g);
+        var things = validateData(text);
+        if (!things) {return;}
+        $("#textContainter").removeClass("error");
+        $("#errorLabel").addClass("hidden");
+        $("#inputs").addClass("hidden");
         $.each(things, function(index1, thing1) {
             weights[thing1] = 0;
             $.each(things, function(index2, thing2) {
@@ -20,12 +45,10 @@ $(function() {
         });
         $("#compare").removeClass("hidden");
         setCompare();
-        console.log(choices);
     });
 
     $(".choice").click(function() {
         weights[$(this).text()]++;
-        console.log(weights);
         currentChoice++;
         if (currentChoice == choices.length) {
             $("#compare").addClass("hidden");
