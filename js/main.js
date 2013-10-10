@@ -2,9 +2,8 @@ var choices = [];
 var items = [];
 var currentChoice = 0;
 var setCompare = function() {
-    $("#currentChoice").text(currentChoice+1);
-    var percent = Math.round(currentChoice*100/items.length);
-    console.log(percent+'%', (100-percent)+"%");
+    $("#currentChoice").text(currentChoice);
+    var percent = Math.round(currentChoice*100/choices.length);
     $("#bar-full").text(percent + "%");
     $("#bar-full").height(percent + "%");
     $("#bar-empty").height((100-percent) + "%");
