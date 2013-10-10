@@ -85,6 +85,7 @@ $(function() {
     });
 
     $("#backCompare").click(function(){
-
+        currentChoice--;
+        setCompare();
     });
 });
