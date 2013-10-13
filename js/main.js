@@ -3,6 +3,7 @@ var items = [];
 var history = [];
 var currentText1 = '', currentText2  = '', choicesLeft = 0;
 var updateStatus = function() {
+    optimizeSorting();
     var i = 0;
     var isNextChoice = false;
     $.each(choices, function(text1, subChoices) {
@@ -28,21 +29,43 @@ var cloneObject = function(obj) {
     $.extend(true, copiedObject, obj);
     return copiedObject;
 }
-/*
-var optimizeSorting = function(arr) {
+var optimizeSorting = function(t1, t2, ch) {
     var changed = false;
-    $.each(arr, function(index1, choice1) {
-        if (choice1[2] == 1) {
-            //choice1[1] > choice1[2]
-            $.each(arr, function(index2, choice2) {
-                if (choice2[1] == choice1[0] && choice2[2] == 1) {
-
-                }
-            });
-        }
+    $.each(choices, function(text1, subChoices) {
+        $.each(subChoices, function(text2, choice) {
+            if (choice === 1) {
+                $.each(choices, function(t1, subCh) {
+                    $.each(subCh, function(t2, ch) {
+                        /*
+                        text1 > text2
+                        t1 > text1 => t1 > text2
+                         */
+                        if (ch == 1 && t2 == text1 && isNaN(choices[t1][text2])) {
+                            changed = true;
+                            choices[t1][text2] = 1;
+                            choices[text2][t1] = 0;
+                            changed = true;
+                        }
+                        /*
+                        text1 > text2
+                        text2 > t2 => text1 > t2
+                         */
+                        if (ch == 1 && t1 == text2 && isNaN(choices[text1][t2])) {
+                            changed = true;
+                            choices[text1][t2] = 1;
+                            choices[t2][text1] = 0;
+                            changed = true;
+                        }
+                    });
+                });
+            }
+        });
     });
-    return changed;
-};*/
+    if (changed) {
+        optimizeSorting();
+        return;
+    }
+};
 var setCompare = function() {
     var totalChoices = (items.length*items.length - items.length)/2;
     $("#currentChoice").text(totalChoices - choicesLeft);
