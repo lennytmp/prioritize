@@ -1,14 +1,57 @@
-var choices = [];
+var choices = {};
 var items = [];
-var currentChoice = 0;
+var history = [];
+var currentText1 = '', currentText2  = '', choicesLeft = 0;
+var updateStatus = function() {
+    var i = 0;
+    var isNextChoice = false;
+    $.each(choices, function(text1, subChoices) {
+        $.each(subChoices, function(text2, choice) {
+            if (isNaN(choice)) {
+                if (i == 0) {
+                    currentText1 = text1;
+                    currentText2 = text2;
+                    isNextChoice = true;
+                }
+                i++;
+            }
+        });
+    });
+    choicesLeft = i/2;
+    if (isNextChoice) {
+        setCompare();
+    }
+    return isNextChoice;
+};
+var cloneObject = function(obj) {
+    var copiedObject = {};
+    $.extend(true, copiedObject, obj);
+    return copiedObject;
+}
+/*
+var optimizeSorting = function(arr) {
+    var changed = false;
+    $.each(arr, function(index1, choice1) {
+        if (choice1[2] == 1) {
+            //choice1[1] > choice1[2]
+            $.each(arr, function(index2, choice2) {
+                if (choice2[1] == choice1[0] && choice2[2] == 1) {
+
+                }
+            });
+        }
+    });
+    return changed;
+};*/
 var setCompare = function() {
-    $("#currentChoice").text(currentChoice);
-    var percent = Math.round(currentChoice*100/choices.length);
+    var totalChoices = (items.length*items.length - items.length)/2;
+    $("#currentChoice").text(totalChoices - choicesLeft);
+    var percent = Math.round((totalChoices - choicesLeft)*100/totalChoices);
     $("#bar-full").text(percent + "%");
     $("#bar-full").height(percent + "%");
     $("#bar-empty").height((100-percent) + "%");
-    $("#thing0").text(choices[currentChoice][0]);
-    $("#thing1").text(choices[currentChoice][1]);
+    $("#thing0").text(currentText1);
+    $("#thing1").text(currentText2);
 };
 var validateData = function(text) {
     if (text=="") {
@@ -37,27 +80,32 @@ $(function() {
         var text = $("#text").val();
         items = validateData(text);
         if (!items) {return;}
-        choices = [];
-        currentChoice = 0;
+        choices = {};
         $("#textContainter").removeClass("error");
         $("#errorLabel").addClass("hidden");
         $("#inputs").addClass("hidden");
         $.each(items, function(index1, thing1) {
+            choices[thing1] = {};
             $.each(items, function(index2, thing2) {
-                if (index2 > index1) {
-                    choices.push([thing1, thing2, 0]);
+                if (index2 == index1) {
+                    choices[thing1][thing2] = 0;
+                } else {
+                    choices[thing1][thing2] = NaN;
                 }
             });
         });
+        updateStatus();
         $("#totalChoices").text(choices.length);
         $("#compare").removeClass("hidden");
-        setCompare();
     });
 
     $(".choice").click(function() {
-        choices[currentChoice][2] = choices[currentChoice][0]==$(this).text() ? 1 : 0;
-        currentChoice++;
-        if (currentChoice == choices.length) {
+        var was = cloneObject(choices);
+        history.push(cloneObject(choices));
+        choices[currentText1][currentText2] = currentText1==$(this).text() ? 1 : 0;
+        choices[currentText2][currentText1] = 1 - choices[currentText1][currentText2];
+        var isNextChoice = updateStatus();
+        if (!isNextChoice) {
             $("#compare").addClass("hidden");
             $("#output").removeClass("hidden");
             var sortable = [];
@@ -65,16 +113,13 @@ $(function() {
             for (var num in items) {
                 weights[items[num]] = 0;
             }
-            var fullChoicesMatrix = [];
-            for (var num in choices) {
-                var choice = choices[num];
-                fullChoicesMatrix.push(choice);
-                var subChoice = [choice[1], choice[0], 1-choice[2]];
-                fullChoicesMatrix.push(subChoice);
-            }
-            for (var num in fullChoicesMatrix) {
-                var choice = fullChoicesMatrix[num];
-                weights[choice[0]] += choice[2];
+            for (var text1 in choices) {
+                if(typeof weights[text1] === 'undefined'){
+                    weights[text1] = 0;
+                }
+                for (var text2 in choices[text1]) {
+                    weights[text1] += choices[text1][text2];
+                }
             }
             for (var item in weights) {
                 sortable.push([item, weights[item]]);
@@ -89,13 +134,15 @@ $(function() {
             }
             return;
         }
-        setCompare();
     });
 
     $(".back").click(function(){
-        if (currentChoice > 0) {
-            currentChoice--;
-            setCompare();
+        if (history.length > 0) {
+            var lastElem = history.length-1;
+            choices = cloneObject(history[lastElem]);
+            delete history[lastElem];
+            history.splice(lastElem, 1);
+            updateStatus();
             if ($("#compare").hasClass("hidden")) {
                 $("#compare").removeClass("hidden");
                 $("#result").html("");
